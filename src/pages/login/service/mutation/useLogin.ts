@@ -1,10 +1,14 @@
 import { useMutation } from "@tanstack/react-query";
 import { request } from "../../../../config/request";
+import { FieldType } from "../../types";
 
 export const useLogin = () => {
   return useMutation({
-    mutationFn: (data) => {
-      return request.post("/api/admin-login", data).then((res) => res.data);
+    mutationKey: ["login"],
+    mutationFn: (data: FieldType) => {
+      return request
+        .post<{ token: string }>("/api/admin-login/", data)
+        .then((res) => res.data);
     },
   });
 };
