@@ -3,4 +3,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background-image: linear-gradient(
+    to right,
+    rgb(232, 245, 96),
+    rgb(0, 128, 100)
+  );
 }
