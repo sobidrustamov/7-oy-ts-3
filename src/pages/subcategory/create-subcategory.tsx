@@ -1,20 +1,20 @@
 import { useNavigate } from "react-router-dom";
-import { CategoryForm } from "./../../components/category-form";
-import { useCreateCategory } from "./service/mutation/useCreateCategory";
-import { CreateCategoryType } from "./types-category";
+import { useCreateSubCategory } from "./service/mutation/useCreateSubCategory";
 import { Tabs, message } from "antd";
 import type { TabsProps } from "antd";
+import { CreateSubCategoryType } from "./types/sub-types";
+import { SubCategoryForm } from "../../components/subcategory-form";
 
-export const CreateCategory: React.FC = () => {
+export const CreateSubCategory: React.FC = () => {
   const navigate = useNavigate();
 
-  const { mutate, isPending } = useCreateCategory();
+  const { mutate, isPending } = useCreateSubCategory();
 
-  const submit = (values: CreateCategoryType) => {
+  const submit = (values: CreateSubCategoryType) => {
     const formData = new FormData();
     formData.append("title", values.title);
     if (values.image) formData.append("image", values.image.file);
-    formData.append("parent", "");
+    formData.append("parent", values.parent);
 
     mutate(formData, {
       onSuccess: () => {
@@ -26,13 +26,13 @@ export const CreateCategory: React.FC = () => {
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: "Create",
-      children: <CategoryForm submit={submit} isPending={isPending} />,
+      label: "Sub Category",
+      children: <SubCategoryForm submit={submit} isPending={isPending} />,
     },
     {
       key: "2",
-      label: "Sub Category",
-      children: "Sub Category Items",
+      label: "Attrebute",
+      children: "Sub Category Attrebute",
     },
   ];
   return (

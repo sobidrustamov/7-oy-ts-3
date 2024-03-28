@@ -3,12 +3,11 @@ import { request } from "../../../../config/request";
 import { CreateCategoryType } from "../../types-category";
 import { client } from "../../../../config/query-client";
 
-export const useCreateCategory = () => {
+export const useEditCategory = (id: string | undefined) => {
   return useMutation({
-    mutationKey: ["create"],
     mutationFn: (data: FormData) =>
       request
-        .post<CreateCategoryType>("/category/", data, {
+        .put<CreateCategoryType>(`/category/${id}/`, data, {
           headers: { "Content-Type": "multipart/form-data" },
         })
         .then((res) => res.data),

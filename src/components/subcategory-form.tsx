@@ -6,14 +6,16 @@ import {
   UploadFile,
   UploadProps,
   Image,
+  Select,
 } from "antd";
 
 import { PlusOutlined } from "@ant-design/icons";
-import { CreateCategoryType } from "../pages/category/types-category";
 import { useState } from "react";
+import { CreateSubCategoryType } from "../pages/subcategory/types/sub-types";
+import { useCategoryList } from "../pages/category/service/query/useGetCategoryList";
 
 interface Props {
-  submit: (values: CreateCategoryType) => void;
+  submit: (values: CreateSubCategoryType) => void;
   isPending: boolean;
   initialValues?: {
     title?: string;
@@ -21,11 +23,14 @@ interface Props {
   };
 }
 
-export const CategoryForm: React.FC<Props> = ({
+export const SubCategoryForm: React.FC<Props> = ({
   submit,
   isPending,
   initialValues,
 }) => {
+  const { data } = useCategoryList();
+  console.log(data);
+
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
@@ -45,6 +50,15 @@ export const CategoryForm: React.FC<Props> = ({
         onFinish={submit}
         autoComplete="off"
       >
+        <Form.Item label="Select" name="parent">
+          <Select>
+            {data?.map((option) => (
+              <Select.Option key={option.id} value={option.id}>
+                {option.title}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
         <Form.Item
           label="Title"
           name="title"
@@ -52,7 +66,6 @@ export const CategoryForm: React.FC<Props> = ({
         >
           <Input />
         </Form.Item>
-
         <Form.Item label="Image" name={"image"}>
           <Upload.Dragger
             maxCount={1}
@@ -71,7 +84,6 @@ export const CategoryForm: React.FC<Props> = ({
         {initialValues && !fileList.length && (
           <Image src={initialValues.image} />
         )}
-
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={isPending}>
             Submit

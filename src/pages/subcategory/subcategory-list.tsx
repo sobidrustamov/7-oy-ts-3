@@ -1,30 +1,28 @@
-import { Button, Image, Spin, Table, message } from "antd";
-import { useCategoryList } from "./service/query/useGetCategoryList";
-import { CategoryType } from "./types-category";
+import { CategoryType } from "../category/types-category";
+import { Button, Image, Table, Spin } from "antd";
+import { useSubCategoryList } from "./service/query/useSubCategoryList";
 import { useNavigate } from "react-router-dom";
-import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
+import { useDeleteSubCategory } from "./service/mutation/useDeleteSubCategory";
 
 interface results {
   id: number;
-  title: string;
   image: string;
-  children: [];
+  parent: { id: number; title: string };
+  title: string;
 }
 [];
 
-export const CategoryList: React.FC = () => {
+export const SubCategoryList: React.FC = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useCategoryList();
-  const { mutate, isPending } = useDeleteCategory();
+  const { data, isLoading } = useSubCategoryList();
+  console.log(data);
 
-  const dataSource = data?.map((item: results) => {
-    return { key: item.id, id: item.id, image: item.image, name: item.title };
-  });
+  const { mutate } = useDeleteSubCategory();
 
-  const deleteCategory = (data: CategoryType) => {
-    mutate(data.id, {
+  const deleteSubCategory = (id: number) => {
+    mutate(id, {
       onSuccess: () => {
-        message.success("success");
+        console.log("success");
       },
     });
   };
@@ -34,6 +32,11 @@ export const CategoryList: React.FC = () => {
       title: "Id",
       dataIndex: "key",
       key: "key",
+    },
+    {
+      title: "Category",
+      dataIndex: "parent",
+      key: "parent",
     },
     {
       title: "Img",
@@ -53,7 +56,7 @@ export const CategoryList: React.FC = () => {
       render: (data: CategoryType) => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button danger onClick={() => deleteCategory(data)}>
+            <Button danger onClick={() => deleteSubCategory(data.id)}>
               Delete
             </Button>
             <a href={`edit-category/${data.id}`}>
@@ -67,9 +70,19 @@ export const CategoryList: React.FC = () => {
     },
   ];
 
+  const dataSource = data?.results.map((item: results) => {
+    return {
+      key: item.id,
+      parent: item.parent.title,
+      id: item.id,
+      image: item.image,
+      name: item.title,
+    };
+  });
+
   return (
     <div>
-      {isPending || isLoading ? (
+      {isLoading ? (
         <div
           style={{
             height: "80vh",
@@ -84,7 +97,7 @@ export const CategoryList: React.FC = () => {
         <>
           <Button
             type="primary"
-            onClick={() => navigate("/app/create-category")}
+            onClick={() => navigate("/app/create-subcategory")}
           >
             Create
           </Button>

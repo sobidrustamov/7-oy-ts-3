@@ -2,10 +2,15 @@ import { useMutation } from "@tanstack/react-query";
 import { request } from "../../../../config/request";
 import { client } from "../../../../config/query-client";
 
-export const useDeleteCategory = () => {
+export const useCreateSubCategory = () => {
   return useMutation({
-    mutationFn: (id: string | number) =>
-      request.delete(`/category/${id}/`).then((res) => res.data),
+    mutationKey: ["create"],
+    mutationFn: (data: FormData) =>
+      request
+        .post("/category/", data, {
+          headers: { "Content-Type": "multipart/form-data" },
+        })
+        .then((res) => res.data),
     onSettled: () => {
       client.invalidateQueries({ queryKey: ["category-list"] });
     },

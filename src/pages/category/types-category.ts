@@ -1,29 +1,17 @@
 import { UploadFile } from "antd";
 
-export type Children = {
-  id: string;
-  title: string;
-  image: string;
-};
-
 export interface CategoryType {
+  attributes: [];
+  children: [];
   id: number;
-  title: string;
   image: string;
-  children: Children[];
+  parent: null | number;
+  title: string;
 }
-export type CreateCategoryType = {
+export interface CreateCategoryType {
   title: string;
   image: {
     file: File;
     fileList: UploadFile;
   };
-};
-export type CategoryCreateType = {
-  id: number;
-  title: string;
-  image: {
-    file: File;
-    fileList: UploadFile;
-  };
-};
+}

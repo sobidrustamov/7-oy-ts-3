@@ -45,7 +45,7 @@ const MainLayout: React.FC = () => {
             {
               key: "2",
               icon: <FileAddOutlined />,
-              label: <Link to="/app/sub-category-list">Sub Category List</Link>,
+              label: <Link to="/app/subcategory-list">Sub Category List</Link>,
             },
             {
               key: "3",

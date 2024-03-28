@@ -5,7 +5,17 @@
   justify-content: center;
   background-image: linear-gradient(
     to right,
-    rgb(232, 245, 96),
-    rgb(0, 128, 100)
+    rgb(245, 235, 96),
+    rgb(0, 70, 128)
   );
+}
+
+.form {
+  padding: 1rem;
+  border-radius: 1rem;
+  background-color: #fff;
+}
+
+.title {
+  text-align: center;
 }
