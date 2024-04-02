@@ -5,7 +5,15 @@ interface SubCategoryResponse {
   count: number;
   next: null;
   previous: null;
-  results: [];
+  results: {
+    id: number;
+    image: string;
+    parent: {
+      id: number;
+      title: string;
+    };
+    title: string;
+  }[];
 }
 
 export const useSubCategoryList = () => {

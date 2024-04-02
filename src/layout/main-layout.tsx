@@ -50,7 +50,17 @@ const MainLayout: React.FC = () => {
             {
               key: "3",
               icon: <WeiboCircleOutlined />,
+              label: <Link to="/app/brand-list">Product List</Link>,
+            },
+            {
+              key: "4",
+              icon: <WeiboCircleOutlined />,
               label: <Link to="/app/brand-list">Brand List</Link>,
+            },
+            {
+              key: "5",
+              icon: <WeiboCircleOutlined />,
+              label: <Link to="/app/brand-list">Attrebute</Link>,
             },
           ]}
         ></Menu>

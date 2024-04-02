@@ -6,8 +6,8 @@ interface CategoryResponse {
   next: null;
   previous: null;
   results: {
-    id: number;
-    title:string;
+    id: string;
+    title: string;
     image: string;
     children: [];
   }[];

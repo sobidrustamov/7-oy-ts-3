@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
 
 interface results {
-  id: number;
+  id: string;
   title: string;
   image: string;
   children: [];
@@ -56,7 +56,7 @@ export const CategoryList: React.FC = () => {
             <Button danger onClick={() => deleteCategory(data)}>
               Delete
             </Button>
-            <a href={`edit-category/${data.id}`}>
+            <a href={`/app/edit-category/${data.id}`}>
               <Button type="primary" ghost>
                 Edit
               </Button>

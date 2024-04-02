@@ -7,6 +7,7 @@ import { CreateCategory } from "./pages/category/create-category";
 import { EditCategory } from "./pages/category/edit-category";
 import { SubCategoryList } from "./pages/subcategory/subcategory-list";
 import { CreateSubCategory } from "./pages/subcategory/create-subcategory";
+import { EditSubcategory } from "./pages/subcategory/edit-subcategory";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="edit-category/:id" element={<EditCategory />} />
         <Route path="subcategory-list" element={<SubCategoryList />} />
         <Route path="create-subcategory" element={<CreateSubCategory />} />
+        <Route path="edit-subcategory/:id" element={<EditSubcategory />} />
       </Route>
     </Routes>
   );

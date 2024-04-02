@@ -1,13 +1,14 @@
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { useCreateSubCategory } from "./service/mutation/useCreateSubCategory";
 import { Tabs, message } from "antd";
 import type { TabsProps } from "antd";
 import { CreateSubCategoryType } from "./types/sub-types";
 import { SubCategoryForm } from "../../components/subcategory-form";
+import { AttrebuteForm } from "../../components/attrebute-form";
+import { useState } from "react";
 
 export const CreateSubCategory: React.FC = () => {
-  const navigate = useNavigate();
-
+  const [parent, setParent] = useState<number | undefined>(undefined);
   const { mutate, isPending } = useCreateSubCategory();
 
   const submit = (values: CreateSubCategoryType) => {
@@ -17,12 +18,15 @@ export const CreateSubCategory: React.FC = () => {
     formData.append("parent", values.parent);
 
     mutate(formData, {
-      onSuccess: () => {
+      onSuccess: (res) => {
         message.success("success");
-        navigate("/app/category-list");
+        setParent(res.data.id);
+        // navigate("/app/subcategory-list");
+        // console.log(data);
       },
     });
   };
+
   const items: TabsProps["items"] = [
     {
       key: "1",
@@ -31,8 +35,8 @@ export const CreateSubCategory: React.FC = () => {
     },
     {
       key: "2",
-      label: "Attrebute",
-      children: "Sub Category Attrebute",
+      label: "SubAttrebute",
+      children: <AttrebuteForm parent={parent} />,
     },
   ];
   return (

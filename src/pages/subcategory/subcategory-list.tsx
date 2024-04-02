@@ -59,7 +59,7 @@ export const SubCategoryList: React.FC = () => {
             <Button danger onClick={() => deleteSubCategory(data.id)}>
               Delete
             </Button>
-            <a href={`edit-category/${data.id}`}>
+            <a href={`edit-subcategory/${data.id}`}>
               <Button type="primary" ghost>
                 Edit
               </Button>
@@ -72,8 +72,8 @@ export const SubCategoryList: React.FC = () => {
 
   const dataSource = data?.results.map((item: results) => {
     return {
-      key: item.id,
-      parent: item.parent.title,
+      key: item?.id,
+      parent: item?.parent?.title,
       id: item.id,
       image: item.image,
       name: item.title,

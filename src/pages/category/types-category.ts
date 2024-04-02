@@ -9,6 +9,7 @@ export interface CategoryType {
   title: string;
 }
 export interface CreateCategoryType {
+  id: number;
   title: string;
   image: {
     file: File;

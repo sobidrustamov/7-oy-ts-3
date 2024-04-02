@@ -55,11 +55,13 @@ export const EditCategory: React.FC = () => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
             <Button danger>Delete</Button>
-            <a href={`edit-category/${data.id}`}>
-              <Button type="primary" ghost>
+              <Button
+                type="primary"
+                ghost
+                onClick={() => navigate(`/app/edit-subcategory/${data.id}`)}
+              >
                 Edit
               </Button>
-            </a>
           </div>
         );
       },
@@ -69,7 +71,7 @@ export const EditCategory: React.FC = () => {
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: "Create",
+      label: "Edit Category",
       children: (
         <CategoryForm
           submit={submit}

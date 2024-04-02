@@ -2,15 +2,15 @@ import { useQuery } from "@tanstack/react-query";
 import { request } from "../../../../config/request";
 
 interface ResponseType {
+  id: number;
+  image: string;
+  title: string;
+  parent: { id: number; title: string };
   attributes: [];
   children: [];
-  id: string;
-  image: string;
-  parent: null | number;
-  title: string;
 }
 
-export const useSingleCategory = (id: string | undefined) => {
+export const useSingleSubCategory = (id: string | undefined) => {
   return useQuery({
     queryKey: ["single-category"],
     queryFn: () =>

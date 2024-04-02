@@ -20,6 +20,24 @@ interface Props {
   initialValues?: {
     title?: string;
     image?: string;
+    parent?: {
+      id: number;
+      title: string;
+    };
+    attributes?:
+      | [
+          {
+            id: number;
+            title: string;
+            values: [
+              {
+                id: number;
+                value: string;
+              }
+            ];
+          }
+        ]
+      | [];
   };
 }
 
@@ -29,28 +47,34 @@ export const SubCategoryForm: React.FC<Props> = ({
   initialValues,
 }) => {
   const { data } = useCategoryList();
-  console.log(data);
 
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
+
   return (
     <div>
       <Form
-        name="basic"
         style={{
           maxWidth: 600,
         }}
         initialValues={{
           title: initialValues?.title,
+          parent: initialValues?.parent,
         }}
         layout="vertical"
         onFinish={submit}
         autoComplete="off"
       >
-        <Form.Item label="Select" name="parent">
+        <Form.Item
+          label="Category"
+          name="parent"
+          rules={[
+            { required: true, message: "Please select parent Category!" },
+          ]}
+        >
           <Select>
             {data?.map((option) => (
               <Select.Option key={option.id} value={option.id}>

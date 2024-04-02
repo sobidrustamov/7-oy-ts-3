@@ -1,12 +1,17 @@
-import { useNavigate } from "react-router-dom";
-import { CategoryForm } from "./../../components/category-form";
-import { useCreateCategory } from "./service/mutation/useCreateCategory";
-import { CreateCategoryType } from "./types-category";
 import { Tabs, message } from "antd";
 import type { TabsProps } from "antd";
+import { useState } from "react";
+import { CategoryForm } from "../../components/category-form";
+import { CreateCategoryType } from "./types-category";
+import { useCreateCategory } from "./service/mutation/useCreateCategory";
+import { useNavigate } from "react-router-dom";
+import { CreateParent } from "./components/create-parent";
 
 export const CreateCategory: React.FC = () => {
   const navigate = useNavigate();
+
+  const [activeKey, setActivKey] = useState(1);
+  const [parentId, setParentId] = useState<number | undefined>(undefined);
 
   const { mutate, isPending } = useCreateCategory();
 
@@ -14,30 +19,41 @@ export const CreateCategory: React.FC = () => {
     const formData = new FormData();
     formData.append("title", values.title);
     if (values.image) formData.append("image", values.image.file);
-    formData.append("parent", "");
+    formData.append("parent", `${parentId}`);
 
     mutate(formData, {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        console.log(data);
         message.success("success");
         navigate("/app/category-list");
       },
     });
   };
+
   const items: TabsProps["items"] = [
     {
       key: "1",
       label: "Create",
-      children: <CategoryForm submit={submit} isPending={isPending} />,
+      children: (
+        <CreateParent setParentId={setParentId} setActivKey={setActivKey} />
+      ),
     },
+
     {
       key: "2",
       label: "Sub Category",
-      children: "Sub Category Items",
+      children: <CategoryForm submit={submit} isPending={isPending} />,
     },
   ];
+  console.log(activeKey, parentId);
+
   return (
     <div>
-      <Tabs defaultActiveKey="1" items={items} />
+      <Tabs
+        // defaultActiveKey={`${activeKey}`}
+        activeKey={`${activeKey}`}
+        items={items}
+      />
     </div>
   );
 };
