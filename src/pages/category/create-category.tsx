@@ -2,7 +2,7 @@ import { Tabs, message } from "antd";
 import type { TabsProps } from "antd";
 import { useState } from "react";
 import { CategoryForm } from "../../components/category-form";
-import { CreateCategoryType } from "./types-category";
+import { CreateCategoryType } from "./types/types-category";
 import { useCreateCategory } from "./service/mutation/useCreateCategory";
 import { useNavigate } from "react-router-dom";
 import { CreateParent } from "./components/create-parent";

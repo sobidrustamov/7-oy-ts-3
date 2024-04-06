@@ -1,5 +1,5 @@
-import { CategoryType } from "../category/types-category";
-import { Button, Image, Table, Spin } from "antd";
+import { CategoryType } from "../category/types/types-category";
+import { Button, Image, Table, Spin, message } from "antd";
 import { useSubCategoryList } from "./service/query/useSubCategoryList";
 import { useNavigate } from "react-router-dom";
 import { useDeleteSubCategory } from "./service/mutation/useDeleteSubCategory";
@@ -22,7 +22,7 @@ export const SubCategoryList: React.FC = () => {
   const deleteSubCategory = (id: number) => {
     mutate(id, {
       onSuccess: () => {
-        console.log("success");
+        message.success("success");
       },
     });
   };
@@ -70,7 +70,7 @@ export const SubCategoryList: React.FC = () => {
     },
   ];
 
-  const dataSource = data?.results.map((item: results) => {
+  const dataSource = data?.results?.map((item: results) => {
     return {
       key: item?.id,
       parent: item?.parent?.title,
@@ -102,7 +102,7 @@ export const SubCategoryList: React.FC = () => {
             Create
           </Button>
           <div
-            style={{ height: "80vh", marginTop: "1rem", overflow: "scroll" }}
+            style={{ height: "70vh", marginTop: "1rem", overflow: "scroll" }}
           >
             <Table dataSource={dataSource} columns={columns} />
           </div>

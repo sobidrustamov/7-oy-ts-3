@@ -4,7 +4,7 @@ import { SubCategoryForm } from "../../components/subcategory-form";
 import { useEditSubCategory } from "./service/mutation/useEditSubCategory";
 import { CreateSubCategoryType } from "./types/sub-types";
 import { Spin, Tabs, TabsProps, message } from "antd";
-import { AttrebuteForm } from "../../components/attrebute-form";
+import { AttrebuteForm } from "./components/subattrebute-form";
 
 export const EditSubcategory: React.FC = () => {
   const { id } = useParams();
@@ -21,7 +21,6 @@ export const EditSubcategory: React.FC = () => {
       onSuccess: (res) => {
         message.success("success");
         console.log(res);
-        
       },
       onError: (error) => {
         console.log(error);
@@ -41,7 +40,7 @@ export const EditSubcategory: React.FC = () => {
             title: data?.title,
             image: data?.image,
             parent: data?.parent,
-            attributes:data?.attributes
+            attributes: data?.attributes,
           }}
         />
       ),
@@ -50,7 +49,13 @@ export const EditSubcategory: React.FC = () => {
     {
       key: "2",
       label: "Edit Attrebute",
-      children: <AttrebuteForm parent={data?.id} initialValues={data} isLoading={isLoading}/>,
+      children: (
+        <AttrebuteForm
+          parent={data?.id}
+          initialValues={data}
+          isLoading={isLoading}
+        />
+      ),
     },
   ];
 

@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSingleCategory } from "./service/query/useSingleCategory";
 import { Spin, message, TabsProps, Tabs, Button, Table, Image } from "antd";
 import { useEditCategory } from "./service/mutation/useEditCategory";
-import { CategoryType, CreateCategoryType } from "./types-category";
+import { CategoryType, CreateCategoryType } from "./types/types-category";
 import { CategoryForm } from "../../components/category-form";
 
 export const EditCategory: React.FC = () => {
@@ -55,13 +55,13 @@ export const EditCategory: React.FC = () => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
             <Button danger>Delete</Button>
-              <Button
-                type="primary"
-                ghost
-                onClick={() => navigate(`/app/edit-subcategory/${data.id}`)}
-              >
-                Edit
-              </Button>
+            <Button
+              type="primary"
+              ghost
+              onClick={() => navigate(`/app/edit-subcategory/${data.id}`)}
+            >
+              Edit
+            </Button>
           </div>
         );
       },

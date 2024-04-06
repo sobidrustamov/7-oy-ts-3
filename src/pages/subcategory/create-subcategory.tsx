@@ -4,7 +4,7 @@ import { Tabs, message } from "antd";
 import type { TabsProps } from "antd";
 import { CreateSubCategoryType } from "./types/sub-types";
 import { SubCategoryForm } from "../../components/subcategory-form";
-import { AttrebuteForm } from "../../components/attrebute-form";
+import { AttrebuteForm } from "./components/subattrebute-form";
 import { useState } from "react";
 
 export const CreateSubCategory: React.FC = () => {

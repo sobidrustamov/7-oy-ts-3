@@ -2,7 +2,7 @@ import React from "react";
 import { useCreateCategory } from "../service/mutation/useCreateCategory";
 import { CategoryForm } from "../../../components/category-form";
 import { message } from "antd";
-import { CreateCategoryType } from "../types-category";
+import { CreateCategoryType } from "../types/types-category";
 
 interface Props {
   setParentId: React.Dispatch<React.SetStateAction<number | undefined>>;

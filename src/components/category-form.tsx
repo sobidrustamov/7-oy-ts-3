@@ -9,7 +9,7 @@ import {
 } from "antd";
 
 import { PlusOutlined } from "@ant-design/icons";
-import { CreateCategoryType } from "../pages/category/types-category";
+import { CreateCategoryType } from "../pages/category/types/types-category";
 import { useState } from "react";
 
 interface Props {

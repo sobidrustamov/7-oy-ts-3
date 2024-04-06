@@ -1,8 +1,10 @@
-import { Button, Image, Spin, Table, message } from "antd";
-import { useCategoryList } from "./service/query/useGetCategoryList";
-import { CategoryType } from "./types-category";
+import { Button, Image, Input, Pagination, Spin, Table, message } from "antd";
+import { CategoryType } from "./types/types-category";
 import { useNavigate } from "react-router-dom";
 import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
+import { useState } from "react";
+import { useSearchedCategoryList } from "./service/query/useSearchedCategoryList";
+import { usePagination } from "./service/query/usePagination";
 
 interface results {
   id: string;
@@ -13,11 +15,15 @@ interface results {
 [];
 
 export const CategoryList: React.FC = () => {
-  const navigate = useNavigate();
-  const { data, isLoading } = useCategoryList();
-  const { mutate, isPending } = useDeleteCategory();
+  const [search, setSearch] = useState("");
 
-  const dataSource = data?.map((item: results) => {
+  const navigate = useNavigate();
+  const { data, isLoading } = usePagination(1);
+  const { data: searchedData } = useSearchedCategoryList(search);
+  const { mutate, isPending } = useDeleteCategory();
+  console.log(searchedData);
+
+  const dataSource = data?.results.map((item: results) => {
     return { key: item.id, id: item.id, image: item.image, name: item.title };
   });
 
@@ -82,16 +88,68 @@ export const CategoryList: React.FC = () => {
         </div>
       ) : (
         <>
-          <Button
-            type="primary"
-            onClick={() => navigate("/app/create-category")}
-          >
-            Create
-          </Button>
+          <div style={{ width: "77%", display: "flex", gap: "1rem" }}>
+            <Button
+              type="primary"
+              onClick={() => navigate("/app/create-category")}
+            >
+              Create
+            </Button>
+            <Input
+              onChange={(e) =>
+                e.target.value.length > 2
+                  ? setSearch(e.target.value)
+                  : setSearch("")
+              }
+              placeholder="Search"
+              allowClear
+              style={{}}
+            />
+          </div>
           <div
-            style={{ height: "80vh", marginTop: "1rem", overflow: "scroll" }}
+            hidden={searchedData && search ? false : true}
+            style={{ width: "77%", position: "relative" }}
           >
-            <Table dataSource={dataSource} columns={columns} />
+            {searchedData?.map((item, i) => (
+              <div
+                onClick={() => navigate(`/app/edit-category/${item.id}`)}
+                style={{
+                  padding: "1rem",
+                  backgroundColor: `${i % 2 == 0 ? "#f2f4f7" : "#e1e5eb"}`,
+                  cursor: "pointer",
+                  display: "flex",
+                  gap: "3rem",
+                  alignItems: "center",
+                }}
+                key={item.id}
+              >
+                <span>Id: {item.id}</span>
+                <Image
+                  src={item.image}
+                  style={{ width: "50px", height: "50px" }}
+                />
+                <span>{item.title}</span>
+              </div>
+            ))}
+          </div>
+          <div
+            style={{
+              height: "78vh",
+              marginTop: "1rem",
+              overflow: "scroll",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
+            <Table
+              pagination={false}
+              dataSource={dataSource}
+              columns={columns}
+            />
+            <div style={{ textAlign: "center" }}>
+              <Pagination pageSize={10} total={data?.count} />
+            </div>
           </div>
         </>
       )}

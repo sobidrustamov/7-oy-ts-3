@@ -8,11 +8,18 @@ import { EditCategory } from "./pages/category/edit-category";
 import { SubCategoryList } from "./pages/subcategory/subcategory-list";
 import { CreateSubCategory } from "./pages/subcategory/create-subcategory";
 import { EditSubcategory } from "./pages/subcategory/edit-subcategory";
+import { ProductList } from "./pages/product/product-list";
+import { AttributeList } from "./pages/attribute/attribute-list";
+import { BrandList } from "./pages/brand/brand-list";
+import { CreateAttribute } from "./pages/attribute/create-attribute";
+import { EditAttribute } from "./pages/attribute/edit-attribute";
+import { CreateBrand } from "./pages/brand/create-brand";
 
 function App() {
   return (
     <Routes>
       <Route path="/" element={<Login />} />
+
       <Route path="/app" element={<MainLayout />}>
         <Route index element={<Home />} />
         <Route path="category-list" element={<CategoryList />} />
@@ -21,6 +28,12 @@ function App() {
         <Route path="subcategory-list" element={<SubCategoryList />} />
         <Route path="create-subcategory" element={<CreateSubCategory />} />
         <Route path="edit-subcategory/:id" element={<EditSubcategory />} />
+        <Route path="product-list" element={<ProductList />} />
+        <Route path="brand-list" element={<BrandList />} />
+        <Route path="create-brand" element={<CreateBrand />} />
+        <Route path="attribute-list" element={<AttributeList />} />
+        <Route path="create-attribute" element={<CreateAttribute />} />
+        <Route path="edit-attribute/:id" element={<EditAttribute />} />
       </Route>
     </Routes>
   );

@@ -1,23 +1,13 @@
 import { useMutation } from "@tanstack/react-query";
 import { request } from "../../../../config/request";
+import { CreateAttrebuteType } from "../../types/sub-types";
 
-interface AttrebuteType {
-  attributes: {
-    attribute_id: null | number;
-    title: string;
-    values: {
-      value: string;
-      value_id: null | number;
-    }[];
-  }[];
-  category_id: number | undefined;
-}
-[];
+
 export const useCreateAttribute = () => {
   return useMutation({
-    mutationFn: (data: AttrebuteType) =>
+    mutationFn: (data: CreateAttrebuteType) =>
       request
-        .patch<AttrebuteType>("api/category_edit/", data)
+        .patch<CreateAttrebuteType>("api/category_edit/", data)
         .then((res) => res.data),
   });
 };

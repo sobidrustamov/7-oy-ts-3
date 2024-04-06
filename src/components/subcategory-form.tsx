@@ -24,20 +24,7 @@ interface Props {
       id: number;
       title: string;
     };
-    attributes?:
-      | [
-          {
-            id: number;
-            title: string;
-            values: [
-              {
-                id: number;
-                value: string;
-              }
-            ];
-          }
-        ]
-      | [];
+    attributes?: [];
   };
 }
 
@@ -68,21 +55,25 @@ export const SubCategoryForm: React.FC<Props> = ({
         onFinish={submit}
         autoComplete="off"
       >
-        <Form.Item
-          label="Category"
-          name="parent"
-          rules={[
-            { required: true, message: "Please select parent Category!" },
-          ]}
-        >
-          <Select>
-            {data?.map((option) => (
-              <Select.Option key={option.id} value={option.id}>
-                {option.title}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        {initialValues ? (
+          <p></p>
+        ) : (
+          <Form.Item
+            label="Category"
+            name="parent"
+            rules={[
+              { required: true, message: "Please select parent Category!" },
+            ]}
+          >
+            <Select>
+              {data?.map((option) => (
+                <Select.Option key={option.id} value={option.id}>
+                  {option.title}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        )}
         <Form.Item
           label="Title"
           name="title"

@@ -37,7 +37,6 @@ const Login: React.FC<FormProps> = () => {
         className="form "
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
-        // style={}
         layout="vertical"
         initialValues={{ phone_number: +998977109944, password: 87654321 }}
         onFinish={onFinish}

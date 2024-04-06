@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -6,12 +6,20 @@ import {
   DatabaseOutlined,
   FileAddOutlined,
 } from "@ant-design/icons";
+import Cookies from "js-cookie";
 import { Layout, Menu, Button, theme } from "antd";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 
 const { Header, Sider, Content } = Layout;
 
 const MainLayout: React.FC = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!Cookies.get("token")) {
+      navigate("/");
+    }
+  });
+
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -50,17 +58,17 @@ const MainLayout: React.FC = () => {
             {
               key: "3",
               icon: <WeiboCircleOutlined />,
-              label: <Link to="/app/brand-list">Product List</Link>,
+              label: <Link to="/app/brand-list">Brand List</Link>,
             },
             {
               key: "4",
               icon: <WeiboCircleOutlined />,
-              label: <Link to="/app/brand-list">Brand List</Link>,
+              label: <Link to="/app/product-list">Product List</Link>,
             },
             {
               key: "5",
               icon: <WeiboCircleOutlined />,
-              label: <Link to="/app/brand-list">Attrebute</Link>,
+              label: <Link to="/app/attribute-list">Attrebute</Link>,
             },
           ]}
         ></Menu>

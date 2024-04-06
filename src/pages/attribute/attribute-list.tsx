@@ -1,19 +1,27 @@
-import { Button, Image, Spin, Table } from "antd";
-import { useBrandList } from "./service/query/useBrandList";
+import { Button, Spin, Table, message } from "antd";
 import { CategoryType } from "../category/types/types-category";
 import { useNavigate } from "react-router-dom";
+import { useAttributeList } from "./service/query/useAttributeList";
+import { useDeleteAttribute } from "./service/mutation/useDeleteAttribute";
 
 interface results {
+  category: [];
+  category_title: [{ title: string }];
   id: number;
-  image: string;
   title: string;
+  values: [{ id: number; value: string }];
 }
-[];
-
-export const BrandList = () => {
-  const { data, isLoading } = useBrandList();
-
+export const AttributeList = () => {
   const navigate = useNavigate();
+  const { data, isLoading } = useAttributeList();
+  const { mutate } = useDeleteAttribute();
+  const deleteAttribute = (id: number) => {
+    mutate(id, {
+      onSuccess: () => {
+        message.success("success");
+      },
+    });
+  };
 
   const columns = [
     {
@@ -21,15 +29,14 @@ export const BrandList = () => {
       dataIndex: "key",
       key: "key",
     },
+
     {
-      title: "Img",
-      key: "img",
-      render: (data: CategoryType) => {
-        return <Image width={"100px"} height={"100px"} src={data.image} />;
-      },
+      title: "Category",
+      dataIndex: "category",
+      key: "category",
     },
     {
-      title: "Name",
+      title: "Title",
       dataIndex: "name",
       key: "name",
     },
@@ -39,13 +46,10 @@ export const BrandList = () => {
       render: (data: CategoryType) => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button
-              danger
-              // onClick={() => deleteSubCategory(data.id)}
-            >
+            <Button danger onClick={() => deleteAttribute(data.id)}>
               Delete
             </Button>
-            <a href={`edit-subcategory/${data.id}`}>
+            <a href={`edit-attribute/${data.id}`}>
               <Button type="primary" ghost>
                 Edit
               </Button>
@@ -57,11 +61,12 @@ export const BrandList = () => {
   ];
 
   const dataSource = data?.results.map((item: results) => {
+    const categories = item.category_title?.map((item) => item.title);
     return {
       key: item?.id,
       id: item.id,
-      image: item.image,
       name: item.title,
+      category: categories.join(", "),
     };
   });
 
@@ -80,7 +85,10 @@ export const BrandList = () => {
         </div>
       ) : (
         <>
-          <Button type="primary" onClick={() => navigate("/app/create-brand")}>
+          <Button
+            type="primary"
+            onClick={() => navigate("/app/create-attribute")}
+          >
             Create
           </Button>
           <div

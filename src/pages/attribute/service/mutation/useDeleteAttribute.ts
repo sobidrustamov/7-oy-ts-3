@@ -8,7 +8,7 @@ export const useDeleteAttribute = () => {
       request.delete(`/attribute/${id}/`).then((res) => res.data),
     onSettled: () => {
       client.invalidateQueries({
-        queryKey: ["single-category"],
+        queryKey: ["attribute-list"],
       });
     },
   });

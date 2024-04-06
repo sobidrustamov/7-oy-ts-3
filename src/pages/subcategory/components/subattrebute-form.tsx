@@ -1,9 +1,9 @@
 import React from "react";
 import { CloseOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Space, Spin } from "antd";
-import { useCreateAttribute } from "../pages/subcategory/service/mutation/useCreateAttribute";
-import { useDeleteAttributeValue } from "../pages/subcategory/service/mutation/useDeleteAttributeValue";
-import { useDeleteAttribute } from "../pages/subcategory/service/mutation/useDeleteAttribute";
+import { Button, Card, Form, Input, Space, Spin, message } from "antd";
+import { useCreateAttribute } from "../service/mutation/useCreateAttribute";
+import { useDeleteAttributeValue } from "../service/mutation/useDeleteAttributeValue";
+import { useDeleteAttribute } from "../service/mutation/useDeleteAttribute";
 import { useNavigate } from "react-router-dom";
 
 interface Props {
@@ -29,12 +29,9 @@ export const AttrebuteForm: React.FC<Props> = ({
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
-  const { mutate: createAttrebute, isPending: isPending } =
-    useCreateAttribute();
-  const { mutate: deleteAttribute, isPending: isPending1 } =
-    useDeleteAttribute();
-  const { mutate: deleteAttributeValue, isPending: isPending2 } =
-    useDeleteAttributeValue();
+  const { mutate: createAttrebute } = useCreateAttribute();
+  const { mutate: deleteAttribute } = useDeleteAttribute();
+  const { mutate: deleteAttributeValue } = useDeleteAttributeValue();
 
   const submit = (values: AttrebuteData) => {
     const attributes = values?.items?.map((i, index) => {
@@ -69,6 +66,7 @@ export const AttrebuteForm: React.FC<Props> = ({
     const data = { attributes, category_id: parent };
     createAttrebute(data, {
       onSuccess: () => {
+        message.success("success");
         navigate("/app/subcategory-list", { replace: true });
       },
     });
@@ -77,20 +75,20 @@ export const AttrebuteForm: React.FC<Props> = ({
   const removeAttribute = (id: number | undefined) => {
     deleteAttribute(id, {
       onSuccess: () => {
-        console.log("uchdi");
+        message.success("success");
       },
     });
   };
   const removeAttributeValue = (id: number | undefined) => {
     deleteAttributeValue(id, {
       onSuccess: () => {
-        console.log("uchdi");
+        message.success("success");
       },
     });
   };
   return (
     <div>
-      {isLoading || isPending || isPending1 || isPending2 ? (
+      {isLoading ? (
         <Spin />
       ) : (
         <Form
@@ -183,9 +181,17 @@ export const AttrebuteForm: React.FC<Props> = ({
                   );
                 })}
 
-                <Button type="dashed" onClick={() => add()} block>
-                  + Add Item
-                </Button>
+                <div>
+                  <Button
+                    type="dashed"
+                    onClick={() => {
+                      add();
+                    }}
+                    block
+                  >
+                    + Add Item
+                  </Button>
+                </div>
               </div>
             )}
           </Form.List>
