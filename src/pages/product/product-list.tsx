@@ -1,7 +1,8 @@
-import { Button, Image, Spin, Table } from "antd";
+import { Button, Image, Spin, Table, message } from "antd";
 import { useProductList } from "./service/query/useProductList";
 import { useNavigate } from "react-router-dom";
 import { CategoryType } from "../category/types/types-category";
+import { useDeleteProduct } from "./service/mutation/useDeleteProduct";
 
 interface results {
   id: number;
@@ -12,9 +13,18 @@ interface results {
 [];
 export const ProductList: React.FC = () => {
   const { data, isLoading } = useProductList();
+  const { mutate } = useDeleteProduct();
 
   const navigate = useNavigate();
   console.log(data);
+
+  const deleteProduct = (id: number) => {
+    mutate(id, {
+      onSuccess: () => {
+        message.success("success");
+      },
+    });
+  };
 
   const columns = [
     {
@@ -40,13 +50,10 @@ export const ProductList: React.FC = () => {
       render: (data: CategoryType) => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button
-              danger
-              // onClick={() => deleteSubCategory(data.id)}
-            >
+            <Button danger onClick={() => deleteProduct(data.id)}>
               Delete
             </Button>
-            <a href={`edit-subcategory/${data.id}`}>
+            <a href={`edit-product/${data.id}`}>
               <Button type="primary" ghost>
                 Edit
               </Button>

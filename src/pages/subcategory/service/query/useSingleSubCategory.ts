@@ -4,7 +4,7 @@ import { SingleSubResponseType } from "../../types/sub-types";
 
 export const useSingleSubCategory = (id: string | undefined) => {
   return useQuery({
-    queryKey: ["single-category"],
+    queryKey: ["single-category", id],
     queryFn: () =>
       request
         .get<SingleSubResponseType>(`/category/${id}/`)

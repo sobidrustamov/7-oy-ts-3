@@ -12,7 +12,7 @@ interface ResponseType {
 
 export const useSingleCategory = (id: string | undefined) => {
   return useQuery({
-    queryKey: ["single-category"],
+    queryKey: ["single-category", id],
     queryFn: () =>
       request.get<ResponseType>(`/category/${id}/`).then((res) => res.data),
   });

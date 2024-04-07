@@ -1,8 +1,17 @@
 import { CategoryType } from "../category/types/types-category";
-import { Button, Image, Table, Spin, message } from "antd";
-import { useSubCategoryList } from "./service/query/useSubCategoryList";
+import {
+  Button,
+  Image,
+  Table,
+  Spin,
+  message,
+  Pagination,
+  PaginationProps,
+} from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDeleteSubCategory } from "./service/mutation/useDeleteSubCategory";
+import { useState } from "react";
+import { usePagination } from "./service/query/usePagination";
 
 interface results {
   id: number;
@@ -14,8 +23,15 @@ interface results {
 
 export const SubCategoryList: React.FC = () => {
   const navigate = useNavigate();
-  const { data, isLoading } = useSubCategoryList();
+  const [current, setCurrent] = useState(1);
+
+  const { data, isLoading } = usePagination(current);
   console.log(data);
+  console.log(current);
+  const onChange: PaginationProps["onChange"] = (page) => {
+    console.log(page);
+    setCurrent(page);
+  };
 
   const { mutate } = useDeleteSubCategory();
 
@@ -71,6 +87,7 @@ export const SubCategoryList: React.FC = () => {
   ];
 
   const dataSource = data?.results?.map((item: results) => {
+    
     return {
       key: item?.id,
       parent: item?.parent?.title,
@@ -105,6 +122,14 @@ export const SubCategoryList: React.FC = () => {
             style={{ height: "70vh", marginTop: "1rem", overflow: "scroll" }}
           >
             <Table dataSource={dataSource} columns={columns} />
+            <div style={{ textAlign: "center" }}>
+              <Pagination
+                pageSize={1}
+                current={current}
+                onChange={onChange}
+                total={data?.count}
+              />
+            </div>
           </div>
         </>
       )}

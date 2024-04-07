@@ -1,24 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { request } from "../../../../config/request";
-
-interface CategoryResponse {
-  count: number;
-  next: null;
-  previous: null;
-  results: {
-    id: string;
-    title: string;
-    image: string;
-    children: [];
-  }[];
-}
+import { SubCategoryListResponse } from "../../types/sub-types";
 
 export const usePagination = (page: number) => {
   return useQuery({
-    queryKey: ["category-list", page],
+    queryKey: ["subcategory-list", page],
     queryFn: () =>
       request
-        .get<CategoryResponse>(`/category/`, {
+        .get<SubCategoryListResponse>(`/api/subcategory/`, {
           params: { offset: page - 1, limit: 2 },
         })
         .then((res) => res.data),

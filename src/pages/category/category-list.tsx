@@ -1,4 +1,13 @@
-import { Button, Image, Input, Pagination, Spin, Table, message } from "antd";
+import {
+  Button,
+  Image,
+  Input,
+  Pagination,
+  PaginationProps,
+  Spin,
+  Table,
+  message,
+} from "antd";
 import { CategoryType } from "./types/types-category";
 import { useNavigate } from "react-router-dom";
 import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
@@ -16,13 +25,18 @@ interface results {
 
 export const CategoryList: React.FC = () => {
   const [search, setSearch] = useState("");
+  const [current, setCurrent] = useState(1);
 
   const navigate = useNavigate();
-  const { data, isLoading } = usePagination(1);
+  const { data, isLoading } = usePagination(current);
   const { data: searchedData } = useSearchedCategoryList(search);
   const { mutate, isPending } = useDeleteCategory();
-  console.log(searchedData);
 
+  console.log(current);
+  const onChange: PaginationProps["onChange"] = (page) => {
+    console.log(page);
+    setCurrent(page);
+  };
   const dataSource = data?.results.map((item: results) => {
     return { key: item.id, id: item.id, image: item.image, name: item.title };
   });
@@ -108,7 +122,7 @@ export const CategoryList: React.FC = () => {
           </div>
           <div
             hidden={searchedData && search ? false : true}
-            style={{ width: "77%", position: "relative" }}
+            style={{ width: "77%", position: "relative", zIndex: "99" }}
           >
             {searchedData?.map((item, i) => (
               <div
@@ -148,7 +162,12 @@ export const CategoryList: React.FC = () => {
               columns={columns}
             />
             <div style={{ textAlign: "center" }}>
-              <Pagination pageSize={10} total={data?.count} />
+              <Pagination
+                pageSize={1}
+                current={current}
+                onChange={onChange}
+                total={data?.count}
+              />
             </div>
           </div>
         </>

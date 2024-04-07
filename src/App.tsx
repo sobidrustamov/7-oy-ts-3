@@ -14,6 +14,8 @@ import { BrandList } from "./pages/brand/brand-list";
 import { CreateAttribute } from "./pages/attribute/create-attribute";
 import { EditAttribute } from "./pages/attribute/edit-attribute";
 import { CreateBrand } from "./pages/brand/create-brand";
+import { CreateProduct } from "./pages/product/create-product";
+import { EditProduct } from "./pages/product/edit-product";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route path="create-subcategory" element={<CreateSubCategory />} />
         <Route path="edit-subcategory/:id" element={<EditSubcategory />} />
         <Route path="product-list" element={<ProductList />} />
+        <Route path="create-product" element={<CreateProduct />} />
+        <Route path="edit-product/:id" element={<EditProduct />} />
         <Route path="brand-list" element={<BrandList />} />
         <Route path="create-brand" element={<CreateBrand />} />
         <Route path="attribute-list" element={<AttributeList />} />
