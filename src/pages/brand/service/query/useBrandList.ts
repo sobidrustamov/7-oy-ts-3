@@ -7,10 +7,17 @@ interface ResponseBrandType {
   previous: null;
   results: [];
 }
-export const useBrandList = () => {
+export const useBrandList = (filter: string, page: number) => {
   return useQuery({
-    queryKey: ["brand-list"],
+    queryKey: ["brand-list", filter, page],
     queryFn: () =>
-      request.get<ResponseBrandType>("/brand/").then((res) => res.data),
+      request
+        .get<ResponseBrandType>(`/brand/?ordering=${filter}`, {
+          params: { offset: page, limit: 5 },
+        })
+        .then((res) => {
+          const size = Math.ceil(res.data.count);
+          return { data: res.data, size };
+        }),
   });
 };

@@ -22,8 +22,7 @@ export const CreateCategory: React.FC = () => {
     formData.append("parent", `${parentId}`);
 
     mutate(formData, {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: () => {
         message.success("success");
         navigate("/app/category-list");
       },

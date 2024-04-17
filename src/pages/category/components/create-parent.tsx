@@ -19,7 +19,6 @@ export const CreateParent: React.FC<Props> = ({ setParentId, setActivKey }) => {
     mutate(formData, {
       onSuccess: (res) => {
         message.success("success");
-
         setParentId(res.data.id);
         setActivKey(2);
       },

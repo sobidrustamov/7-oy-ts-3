@@ -20,5 +20,6 @@ export const useSearchedCategoryList = (search: string) => {
       request
         .get<CategoryResponse>("/category/", { params: { search } })
         .then((res) => res.data.results),
+      
   });
 };

@@ -13,12 +13,14 @@ interface CategoryResponse {
   }[];
 }
 
-export const useCategoryList = () => {
+export const useCategoryList = (page?: number) => {
   return useQuery({
-    queryKey: ["category-list"],
+    queryKey: ["category-list", page],
     queryFn: () =>
       request
-        .get<CategoryResponse>("/category/")
-        .then((res) => res.data.results),
+        .get<CategoryResponse>("/category/", {
+          params: { limit: page ? 5 : "", offset: page },
+        })
+        .then((res) => res.data),
   });
 };

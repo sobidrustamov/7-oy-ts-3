@@ -1,9 +1,19 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useSingleCategory } from "./service/query/useSingleCategory";
-import { Spin, message, TabsProps, Tabs, Button, Table, Image } from "antd";
+import {
+  Spin,
+  message,
+  TabsProps,
+  Tabs,
+  Button,
+  Table,
+  Image,
+  Popconfirm,
+} from "antd";
 import { useEditCategory } from "./service/mutation/useEditCategory";
 import { CategoryType, CreateCategoryType } from "./types/types-category";
 import { CategoryForm } from "../../components/category-form";
+import { useDeleteSubCategory } from "../subcategory/service/mutation/useDeleteSubCategory";
 
 export const EditCategory: React.FC = () => {
   const navigate = useNavigate();
@@ -16,6 +26,7 @@ export const EditCategory: React.FC = () => {
   });
 
   const { mutate, isPending } = useEditCategory(id);
+  const { mutate: deleteSub } = useDeleteSubCategory();
 
   const submit = (values: CreateCategoryType) => {
     const formData = new FormData();
@@ -26,6 +37,14 @@ export const EditCategory: React.FC = () => {
       onSuccess: () => {
         message.success("success");
         navigate("/app/category-list");
+      },
+    });
+  };
+
+  const deleteSubCategory = (id: number) => {
+    deleteSub(id, {
+      onSuccess: () => {
+        message.success("success");
       },
     });
   };
@@ -54,7 +73,12 @@ export const EditCategory: React.FC = () => {
       render: (data: CategoryType) => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button danger>Delete</Button>
+            <Popconfirm
+              title="Delete data"
+              onConfirm={() => deleteSubCategory(data.id)}
+            >
+              <Button danger>Delete</Button>
+            </Popconfirm>{" "}
             <Button
               type="primary"
               ghost

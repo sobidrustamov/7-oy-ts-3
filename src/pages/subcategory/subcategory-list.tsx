@@ -7,6 +7,7 @@ import {
   message,
   Pagination,
   PaginationProps,
+  Popconfirm,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useDeleteSubCategory } from "./service/mutation/useDeleteSubCategory";
@@ -23,17 +24,17 @@ interface results {
 
 export const SubCategoryList: React.FC = () => {
   const navigate = useNavigate();
+
   const [current, setCurrent] = useState(1);
+  const [pages, setPages] = useState(0);
 
-  const { data, isLoading } = usePagination(current);
-  console.log(data);
-  console.log(current);
-  const onChange: PaginationProps["onChange"] = (page) => {
-    console.log(page);
-    setCurrent(page);
-  };
-
+  const { data, isLoading } = usePagination(pages);
   const { mutate } = useDeleteSubCategory();
+
+  const onChange: PaginationProps["onChange"] = (page) => {
+    setCurrent(page);
+    setPages((page - 1) * 5);
+  };
 
   const deleteSubCategory = (id: number) => {
     mutate(id, {
@@ -72,9 +73,12 @@ export const SubCategoryList: React.FC = () => {
       render: (data: CategoryType) => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button danger onClick={() => deleteSubCategory(data.id)}>
-              Delete
-            </Button>
+            <Popconfirm
+              title="Delete data"
+              onConfirm={() => deleteSubCategory(data.id)}
+            >
+              <Button danger>Delete</Button>
+            </Popconfirm>
             <a href={`edit-subcategory/${data.id}`}>
               <Button type="primary" ghost>
                 Edit
@@ -86,8 +90,7 @@ export const SubCategoryList: React.FC = () => {
     },
   ];
 
-  const dataSource = data?.results?.map((item: results) => {
-    
+  const dataSource = data?.data.results?.map((item: results) => {
     return {
       key: item?.id,
       parent: item?.parent?.title,
@@ -119,15 +122,19 @@ export const SubCategoryList: React.FC = () => {
             Create
           </Button>
           <div
-            style={{ height: "70vh", marginTop: "1rem", overflow: "scroll" }}
+            style={{ height: "70vh", marginTop: "1rem", overflowY: "scroll" }}
           >
-            <Table dataSource={dataSource} columns={columns} />
+            <Table
+              dataSource={dataSource}
+              columns={columns}
+              pagination={false}
+            />
             <div style={{ textAlign: "center" }}>
               <Pagination
-                pageSize={1}
+                pageSize={5}
                 current={current}
                 onChange={onChange}
-                total={data?.count}
+                total={data?.size}
               />
             </div>
           </div>

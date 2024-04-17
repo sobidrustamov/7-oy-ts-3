@@ -1,8 +1,19 @@
-import { Button, Image, Spin, Table, message } from "antd";
+import {
+  Button,
+  Image,
+  Pagination,
+  PaginationProps,
+  Spin,
+  Table,
+  message,
+} from "antd";
 import { useProductList } from "./service/query/useProductList";
 import { useNavigate } from "react-router-dom";
 import { CategoryType } from "../category/types/types-category";
 import { useDeleteProduct } from "./service/mutation/useDeleteProduct";
+import { useState } from "react";
+import { useSearchedProductList } from "./service/query/useSearchedProductList";
+import { SearchModal } from "./components/search-modal";
 
 interface results {
   id: number;
@@ -12,11 +23,22 @@ interface results {
 }
 [];
 export const ProductList: React.FC = () => {
-  const { data, isLoading } = useProductList();
+  const navigate = useNavigate();
+
+  const [current, setCurrent] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [search, setSearch] = useState("");
+
+  const { data, isLoading } = useProductList(pages);
+  const { data: searchedData } = useSearchedProductList(search);
+  console.log(searchedData);
+
   const { mutate } = useDeleteProduct();
 
-  const navigate = useNavigate();
-  console.log(data);
+  const onChange: PaginationProps["onChange"] = (page) => {
+    setCurrent(page);
+    setPages((page - 1) * 5);
+  };
 
   const deleteProduct = (id: number) => {
     mutate(id, {
@@ -89,16 +111,35 @@ export const ProductList: React.FC = () => {
         </div>
       ) : (
         <>
-          <Button
-            type="primary"
-            onClick={() => navigate("/app/create-product")}
-          >
-            Create
-          </Button>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button
+              type="primary"
+              onClick={() => navigate("/app/create-product")}
+            >
+              Create
+            </Button>
+            <SearchModal
+              search={search}
+              setSearch={setSearch}
+              data={searchedData?.results}
+            />
+          </div>
           <div
             style={{ height: "80vh", marginTop: "1rem", overflow: "scroll" }}
           >
-            <Table dataSource={dataSource} columns={columns} />
+            <Table
+              dataSource={dataSource}
+              columns={columns}
+              pagination={false}
+            />
+            <div style={{ textAlign: "center", margin: "1rem 0" }}>
+              <Pagination
+                pageSize={5}
+                current={current}
+                onChange={onChange}
+                total={data?.count}
+              />
+            </div>
           </div>
         </>
       )}

@@ -39,7 +39,7 @@ const MainLayout: React.FC = () => {
             fontSize: "24px",
           }}
         >
-          Admin
+          Logo{" "}
         </Link>
         <Menu
           theme="dark"
@@ -68,8 +68,13 @@ const MainLayout: React.FC = () => {
             {
               key: "5",
               icon: <WeiboCircleOutlined />,
-              label: <Link to="/app/attribute-list">Attrebute</Link>,
+              label: <Link to="/app/banner-list">Banner List</Link>,
             },
+            // {
+            //   key: "5",
+            //   icon: <WeiboCircleOutlined />,
+            //   label: <Link to="/app/attribute-list">Attrebute</Link>,
+            // },
           ]}
         ></Menu>
       </Sider>

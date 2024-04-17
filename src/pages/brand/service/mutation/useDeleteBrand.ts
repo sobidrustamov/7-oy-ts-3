@@ -2,12 +2,12 @@ import { useMutation } from "@tanstack/react-query";
 import { request } from "../../../../config/request";
 import { client } from "../../../../config/query-client";
 
-export const useDeleteProduct = () => {
+export const useDeleteBrand = () => {
   return useMutation({
-    mutationFn: (id: number) =>
-      request.delete(`/product/${id}/`).then((res) => res.data),
+    mutationFn: (id: string | number) =>
+      request.delete(`/brand/${id}/`).then((res) => res.data),
     onSettled: () => {
-      client.invalidateQueries({ queryKey: ["product-list"] });
+      client.invalidateQueries({ queryKey: ["brand-list"] });
     },
   });
 };

@@ -11,7 +11,7 @@ interface results {
   title: string;
   values: [{ id: number; value: string }];
 }
-export const AttributeList = () => {
+export const AttributeList:React.FC = () => {
   const navigate = useNavigate();
   const { data, isLoading } = useAttributeList();
   const { mutate } = useDeleteAttribute();

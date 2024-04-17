@@ -66,7 +66,7 @@ export const SubCategoryForm: React.FC<Props> = ({
             ]}
           >
             <Select>
-              {data?.map((option) => (
+              {data?.results.map((option) => (
                 <Select.Option key={option.id} value={option.id}>
                   {option.title}
                 </Select.Option>
@@ -97,7 +97,7 @@ export const SubCategoryForm: React.FC<Props> = ({
           </Upload.Dragger>
         </Form.Item>
         {initialValues && !fileList.length && (
-          <Image src={initialValues.image} />
+          <Image src={initialValues.image} style={{ maxWidth: 300 }} />
         )}
         <Form.Item>
           <Button type="primary" htmlType="submit" loading={isPending}>

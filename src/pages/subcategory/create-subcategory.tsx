@@ -9,6 +9,8 @@ import { useState } from "react";
 
 export const CreateSubCategory: React.FC = () => {
   const [parent, setParent] = useState<number | undefined>(undefined);
+  const [activeKey, setActiveKey] = useState<number>(1);
+
   const { mutate, isPending } = useCreateSubCategory();
 
   const submit = (values: CreateSubCategoryType) => {
@@ -21,8 +23,7 @@ export const CreateSubCategory: React.FC = () => {
       onSuccess: (res) => {
         message.success("success");
         setParent(res.data.id);
-        // navigate("/app/subcategory-list");
-        // console.log(data);
+        setActiveKey(2);
       },
     });
   };
@@ -41,7 +42,7 @@ export const CreateSubCategory: React.FC = () => {
   ];
   return (
     <div>
-      <Tabs defaultActiveKey="1" items={items} />
+      <Tabs activeKey={`${activeKey}`} items={items} />
     </div>
   );
 };

@@ -1,57 +1,42 @@
 import {
   Button,
   Form,
+  Image,
   Input,
   Upload,
   UploadFile,
   UploadProps,
-  Image,
 } from "antd";
-
-import { PlusOutlined } from "@ant-design/icons";
-import { CreateCategoryType } from "../pages/category/types/types-category";
 import { useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
+import { BrandType, CreateBrandType } from "../types/type";
 
 interface Props {
-  submit: (values: CreateCategoryType) => void;
-  isPending: boolean;
-  initialValues?: {
-    title?: string;
-    image?: string;
-  };
+  submit: (values: CreateBrandType) => void;
+  initialValue?: BrandType;
 }
-
-export const CategoryForm: React.FC<Props> = ({
-  submit,
-  isPending,
-  initialValues,
-}) => {
+export const BrandForm: React.FC<Props> = ({ submit, initialValue }) => {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const onChange: UploadProps["onChange"] = ({ fileList: newFileList }) => {
     setFileList(newFileList);
   };
+
   return (
     <div>
       <Form
-        style={{
-          maxWidth: 600,
-        }}
-        initialValues={{
-          title: initialValues?.title,
-        }}
+        style={{ maxWidth: 600 }}
         layout="vertical"
         onFinish={submit}
-        autoComplete="off"
+        initialValues={initialValue}
       >
         <Form.Item
           label="Title"
           name="title"
-          rules={[{ required: true, message: "Please input Category Title!" }]}
+          rules={[{ required: true, message: "Please input Brand Title!" }]}
         >
           <Input />
         </Form.Item>
-
         <Form.Item label="Image" name={"image"}>
           <Upload.Dragger
             maxCount={1}
@@ -67,12 +52,11 @@ export const CategoryForm: React.FC<Props> = ({
             </button>
           </Upload.Dragger>
         </Form.Item>
-        {initialValues && !fileList.length && (
-          <Image src={initialValues.image} style={{ maxWidth: 300 }} />
+        {initialValue && !fileList.length && (
+          <Image style={{ maxWidth: 200 }} src={initialValue.image} />
         )}
-
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={isPending}>
+          <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>

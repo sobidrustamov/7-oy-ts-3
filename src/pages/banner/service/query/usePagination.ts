@@ -15,12 +15,15 @@ interface CategoryResponse {
 
 export const usePagination = (page: number) => {
   return useQuery({
-    queryKey: ["category-list", page],
+    queryKey: ["banner-list", page],
     queryFn: () =>
       request
-        .get<CategoryResponse>(`/category/`, {
-          params: { offset: page - 1, limit: 2 },
+        .get<CategoryResponse>(`/banner/`, {
+          params: { offset: page, limit: 5 },
         })
-        .then((res) => res.data),
+        .then((res) => {
+          const size = Math.ceil(res.data.count);
+          return { data: res.data, size };
+        }),
   });
 };

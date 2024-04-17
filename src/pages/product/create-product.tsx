@@ -4,7 +4,7 @@ import { useCreateProduct } from "./service/mutation/useCreateProduct";
 import { ProductType } from "./types/product-type";
 import { useNavigate } from "react-router-dom";
 
-export const CreateProduct = () => {
+export const CreateProduct:React.FC = () => {
   const { mutate } = useCreateProduct();
   const navigate = useNavigate();
 

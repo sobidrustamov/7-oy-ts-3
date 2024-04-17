@@ -4,17 +4,17 @@ import {
   Pagination,
   PaginationProps,
   Popconfirm,
+  Select,
   Spin,
   Table,
   message,
 } from "antd";
-import { CategoryType } from "./types/types-category";
+import "react-quill/dist/quill.snow.css";
 import { useNavigate } from "react-router-dom";
-import { useDeleteCategory } from "./service/mutation/useDeleteCategory";
+import { useDeleteBanner } from "./service/mutation/useDeleteBanner";
+import { CategoryType } from "../category/types/types-category";
 import { useState } from "react";
-import { useSearchedCategoryList } from "./service/query/useSearchedCategoryList";
-import { SearchModal } from "./components/search-modal";
-import { useCategoryList } from "./service/query/useGetCategoryList";
+import { useFilterBanner } from "./service/query/useFilterBanner";
 
 interface results {
   id: string;
@@ -24,31 +24,22 @@ interface results {
 }
 [];
 
-export const CategoryList: React.FC = () => {
+export const Banner: React.FC = () => {
   const navigate = useNavigate();
 
-  const [search, setSearch] = useState("");
   const [current, setCurrent] = useState(1);
-  const [pages, setPages] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [filter, setFilter] = useState("");
 
-  const { data, isLoading } = useCategoryList(pages);
-  const { data: searchedData } = useSearchedCategoryList(search);
-  const { mutate, isPending } = useDeleteCategory();
+  const { data, isLoading } = useFilterBanner(filter, pages);
+  const { mutate, isPending } = useDeleteBanner();
 
   const onChange: PaginationProps["onChange"] = (page) => {
     setCurrent(page);
     setPages((page - 1) * 5);
   };
 
-  const deleteCategory = (data: CategoryType) => {
-    mutate(data.id, {
-      onSuccess: () => {
-        message.success("success");
-      },
-    });
-  };
-
-  const dataSource = data?.results.map((item: results) => {
+  const dataSource = data?.data?.results.map((item: results) => {
     return {
       key: item.id,
       id: item.id,
@@ -83,11 +74,11 @@ export const CategoryList: React.FC = () => {
           <div style={{ display: "flex", gap: "8px" }}>
             <Popconfirm
               title="Delete data"
-              onConfirm={() => deleteCategory(data)}
+              onConfirm={() => deleteBanner(data)}
             >
               <Button danger>Delete</Button>
             </Popconfirm>
-            <a href={`/app/edit-category/${data.id}`}>
+            <a href={`/app/edit-banner/${data.id}`}>
               <Button type="primary" ghost>
                 Edit
               </Button>
@@ -98,19 +89,22 @@ export const CategoryList: React.FC = () => {
     },
   ];
 
+  const deleteBanner = (data: CategoryType) => {
+    mutate(data.id, {
+      onSuccess: () => {
+        message.success("success");
+      },
+    });
+  };
+
+  const handleChange = (value: string) => {
+    setFilter(value);
+  };
+
   return (
     <div>
-      {isPending || isLoading ? (
-        <div
-          style={{
-            height: "80vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Spin />
-        </div>
+      {isPending ? (
+        <Spin fullscreen />
       ) : (
         <>
           <div
@@ -122,21 +116,31 @@ export const CategoryList: React.FC = () => {
           >
             <Button
               type="primary"
-              onClick={() => navigate("/app/create-category")}
+              onClick={() => navigate("/app/create-banner")}
             >
               Create
             </Button>
-
-            <SearchModal
-              search={search}
-              setSearch={setSearch}
-              data={searchedData}
+            <Select
+              onChange={handleChange}
+              defaultValue="Filter"
+              style={{ width: 120 }}
+              options={[
+                { value: "id", label: "Id" },
+                { value: "-id", label: "Reverse Id" },
+                { value: "title", label: "Title" },
+                { value: "-title", label: "Reverse Title" },
+                { value: "description", label: "Description" },
+                { value: "-description", label: "Description Reverse" },
+                { value: "image", label: "Image" },
+                { value: "-image", label: "Image Reverse" },
+                { value: "updated_at", label: "Updated at" },
+                { value: "-updated_at", label: "Updated at Reverse" },
+                { value: "created_at", label: "Created at" },
+                { value: "-created_at", label: "Created at Reverse" },
+              ]}
             />
           </div>
-          <div
-            hidden={searchedData && search ? false : true}
-            style={{ width: "77%", position: "relative", zIndex: "99" }}
-          ></div>
+
           <div
             style={{
               height: "78vh",
@@ -147,17 +151,21 @@ export const CategoryList: React.FC = () => {
               justifyContent: "space-between",
             }}
           >
-            <Table
-              pagination={false}
-              dataSource={dataSource}
-              columns={columns}
-            />
+            {isLoading ? (
+              <Spin />
+            ) : (
+              <Table
+                pagination={false}
+                dataSource={dataSource}
+                columns={columns}
+              />
+            )}
             <div style={{ textAlign: "center" }}>
               <Pagination
                 pageSize={5}
                 current={current}
                 onChange={onChange}
-                total={data?.count}
+                total={data?.size}
               />
             </div>
           </div>

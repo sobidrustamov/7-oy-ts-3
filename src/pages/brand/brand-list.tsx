@@ -1,7 +1,18 @@
-import { Button, Image, Spin, Table } from "antd";
+import {
+  Button,
+  Image,
+  Pagination,
+  PaginationProps,
+  Select,
+  Spin,
+  Table,
+  message,
+} from "antd";
 import { useBrandList } from "./service/query/useBrandList";
 import { CategoryType } from "../category/types/types-category";
 import { useNavigate } from "react-router-dom";
+import { useDeleteBrand } from "./service/mutation/useDeleteBrand";
+import { useState } from "react";
 
 interface results {
   id: number;
@@ -10,10 +21,28 @@ interface results {
 }
 [];
 
-export const BrandList = () => {
-  const { data, isLoading } = useBrandList();
-
+export const BrandList: React.FC = () => {
   const navigate = useNavigate();
+
+  const [current, setCurrent] = useState(1);
+  const [pages, setPages] = useState(0);
+  const [filter, setFilter] = useState("");
+
+  const { data, isLoading } = useBrandList(filter, pages);
+  const { mutate } = useDeleteBrand();
+
+  const onChange: PaginationProps["onChange"] = (page) => {
+    setCurrent(page);
+    setPages((page - 1) * 5);
+  };
+
+  const deleteBrand = (id: number) => {
+    mutate(id, {
+      onSuccess: () => {
+        message.success("success");
+      },
+    });
+  };
 
   const columns = [
     {
@@ -39,13 +68,10 @@ export const BrandList = () => {
       render: (data: CategoryType) => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button
-              danger
-              // onClick={() => deleteSubCategory(data.id)}
-            >
+            <Button danger onClick={() => deleteBrand(data.id)}>
               Delete
             </Button>
-            <a href={`edit-subcategory/${data.id}`}>
+            <a href={`edit-brand/${data.id}`}>
               <Button type="primary" ghost>
                 Edit
               </Button>
@@ -56,7 +82,7 @@ export const BrandList = () => {
     },
   ];
 
-  const dataSource = data?.results.map((item: results) => {
+  const dataSource = data?.data.results.map((item: results) => {
     return {
       key: item?.id,
       id: item.id,
@@ -65,31 +91,49 @@ export const BrandList = () => {
     };
   });
 
+  const handleChange = (value: string) => {
+    setFilter(value);
+  };
+
   return (
     <div>
-      {isLoading ? (
-        <div
-          style={{
-            height: "80vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Spin />
-        </div>
-      ) : (
-        <>
-          <Button type="primary" onClick={() => navigate("/app/create-brand")}>
-            Create
-          </Button>
-          <div
-            style={{ height: "80vh", marginTop: "1rem", overflow: "scroll" }}
-          >
-            <Table dataSource={dataSource} columns={columns} />
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Button type="primary" onClick={() => navigate("/app/create-brand")}>
+          Create
+        </Button>
+        <Select
+          onChange={handleChange}
+          defaultValue="Filter"
+          style={{ width: 120 }}
+          options={[
+            { value: "id", label: "Id" },
+            { value: "-id", label: "Reverse Id" },
+            { value: "title", label: "Title" },
+            { value: "-title", label: "Reverse Title" },
+          ]}
+        />
+      </div>
+      <div style={{ height: "80vh", marginTop: "1rem", overflowY: "scroll" }}>
+        {isLoading ? (
+          <Spin fullscreen />
+        ) : (
+          <div>
+            <Table
+              dataSource={dataSource}
+              columns={columns}
+              pagination={false}
+            />
+            <div style={{ textAlign: "center", margin: "1rem 0" }}>
+              <Pagination
+                pageSize={5}
+                current={current}
+                onChange={onChange}
+                total={data?.size}
+              />
+            </div>
           </div>
-        </>
-      )}
+        )}
+      </div>
     </div>
   );
 };

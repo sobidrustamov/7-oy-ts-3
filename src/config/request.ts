@@ -2,6 +2,7 @@ import axios, { AxiosInstance } from "axios";
 import Cookies from "js-cookie";
 
 const request: AxiosInstance = axios.create({
+  // baseURL: import.meta.env.VITE_APP_URL,
   baseURL: "http://135.181.108.207/",
   headers: { "Content-Type": "application/json" },
 });
