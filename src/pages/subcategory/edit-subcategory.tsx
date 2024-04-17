@@ -5,9 +5,11 @@ import { useEditSubCategory } from "./service/mutation/useEditSubCategory";
 import { CreateSubCategoryType } from "./types/sub-types";
 import { Spin, Tabs, TabsProps, message } from "antd";
 import { AttrebuteForm } from "./components/subattrebute-form";
+import { useState } from "react";
 
 export const EditSubcategory: React.FC = () => {
   const { id } = useParams();
+  const [activeKey, setActivKey] = useState(1);
 
   const { data, isLoading } = useSingleSubCategory(id);
   const { mutate, isPending } = useEditSubCategory(id);
@@ -16,11 +18,10 @@ export const EditSubcategory: React.FC = () => {
     const formData = new FormData();
     formData.append("title", values.title);
     if (values.image) formData.append("image", values.image.file);
-    // formData.append("parent", values.parent);
     mutate(formData, {
-      onSuccess: (res) => {
+      onSuccess: () => {
         message.success("success");
-        console.log(res);
+        setActivKey(2);
       },
       onError: (error) => {
         console.log(error);
@@ -73,7 +74,7 @@ export const EditSubcategory: React.FC = () => {
           <Spin />
         </div>
       ) : (
-        <Tabs defaultActiveKey={`1`} items={items} />
+        <Tabs activeKey={`${activeKey}`} items={items} />
       )}
     </div>
   );

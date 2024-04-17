@@ -2,13 +2,13 @@ import { Spin, message } from "antd";
 import { BrandForm } from "./components/brand-form";
 import { CreateBrandType } from "./types/type";
 import { useEditBrand } from "./service/mutation/useEditBrand";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useBrand } from "./service/query/useBrand";
 
-export const EditBrand:React.FC = () => {
+export const EditBrand: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { data, isLoading } = useBrand(id);
-  console.log(data);
 
   const { mutate } = useEditBrand(id);
   const submit = (values: CreateBrandType) => {
@@ -20,6 +20,7 @@ export const EditBrand:React.FC = () => {
     mutate(formData, {
       onSuccess: () => {
         message.success("success");
+        navigate("/app/brand-list");
       },
     });
   };

@@ -3,6 +3,7 @@ import {
   Image,
   Pagination,
   PaginationProps,
+  Popconfirm,
   Select,
   Spin,
   Table,
@@ -68,9 +69,12 @@ export const BrandList: React.FC = () => {
       render: (data: CategoryType) => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button danger onClick={() => deleteBrand(data.id)}>
-              Delete
-            </Button>
+            <Popconfirm
+              title="Delete data"
+              onConfirm={() => deleteBrand(data.id)}
+            >
+              <Button danger>Delete</Button>
+            </Popconfirm>
             <a href={`edit-brand/${data.id}`}>
               <Button type="primary" ghost>
                 Edit

@@ -19,7 +19,7 @@ export const useCategoryList = (page?: number) => {
     queryFn: () =>
       request
         .get<CategoryResponse>("/category/", {
-          params: { limit: page ? 5 : "", offset: page },
+          params: { limit: page ? 5 : 0, offset: page },
         })
         .then((res) => res.data),
   });

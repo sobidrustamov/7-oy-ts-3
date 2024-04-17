@@ -19,7 +19,6 @@ export const EditCategory: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const { data, isLoading } = useSingleCategory(id);
-  console.log(data);
 
   const dataSource = data?.children?.map((item: CategoryType) => {
     return { key: item.id, id: item.id, image: item.image, name: item.title };

@@ -2,13 +2,13 @@ import { Spin, message } from "antd";
 import { BannerForm } from "./components/banner-form";
 import { CreateBannerType } from "./types/type";
 import { useEditBanner } from "./service/mutation/useEditBanner";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useBanner } from "./service/query/useBanner";
 
-export const EditBanner:React.FC = () => {
+export const EditBanner: React.FC = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const { data, isLoading } = useBanner(id);
-  console.log(data);
 
   const { mutate } = useEditBanner(id);
   const submit = (values: CreateBannerType) => {
@@ -21,6 +21,7 @@ export const EditBanner:React.FC = () => {
     mutate(formData, {
       onSuccess: () => {
         message.success("success");
+        navigate("/app/banner-list");
       },
     });
   };

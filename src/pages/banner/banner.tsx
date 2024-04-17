@@ -143,7 +143,7 @@ export const Banner: React.FC = () => {
 
           <div
             style={{
-              height: "78vh",
+              height: "73vh",
               marginTop: "1rem",
               overflowY: "scroll",
               display: "flex",

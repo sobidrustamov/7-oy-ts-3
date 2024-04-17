@@ -37,7 +37,7 @@ export const CategoryList: React.FC = () => {
 
   const onChange: PaginationProps["onChange"] = (page) => {
     setCurrent(page);
-    setPages((page - 1) * 5);
+    setPages(page === 1 ? 1 : (page - 1) * 5);
   };
 
   const deleteCategory = (data: CategoryType) => {

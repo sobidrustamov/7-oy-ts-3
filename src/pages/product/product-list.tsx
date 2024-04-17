@@ -3,6 +3,7 @@ import {
   Image,
   Pagination,
   PaginationProps,
+  Popconfirm,
   Spin,
   Table,
   message,
@@ -31,7 +32,6 @@ export const ProductList: React.FC = () => {
 
   const { data, isLoading } = useProductList(pages);
   const { data: searchedData } = useSearchedProductList(search);
-  console.log(searchedData);
 
   const { mutate } = useDeleteProduct();
 
@@ -72,13 +72,20 @@ export const ProductList: React.FC = () => {
       render: (data: CategoryType) => {
         return (
           <div style={{ display: "flex", gap: "8px" }}>
-            <Button danger onClick={() => deleteProduct(data.id)}>
-              Delete
-            </Button>
+            <Popconfirm
+              title="Delete product"
+              onConfirm={() => deleteProduct(data.id)}
+            >
+              <Button danger>Delete</Button>
+            </Popconfirm>
             <a href={`edit-product/${data.id}`}>
               <Button type="primary" ghost>
                 Edit
               </Button>
+            </a>
+            <Button>Variants</Button>
+            <a href={`edit-subcategory/${data.parent}`}>
+              <Button>Category</Button>
             </a>
           </div>
         );
